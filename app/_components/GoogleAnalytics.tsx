@@ -43,18 +43,26 @@ export default function GoogleAnalytics() {
     };
     script.onload = () => {
       console.log("Google Analytics script loaded successfully");
-      // Initialize gtag after script loads
-      gtag('js', new Date());
-      gtag('config', gaId);
-      console.log("Google Analytics initialized");
-      console.log("dataLayer after init:", window.dataLayer);
       
-      // Test manual tracking
+      // Wait a bit for the script to fully load
       setTimeout(() => {
-        console.log("Testing manual tracking...");
-        gtag('event', 'test_event', { 'test_parameter': 'value' });
-        console.log("Manual tracking sent, dataLayer:", window.dataLayer);
-      }, 1000);
+        // Initialize gtag after script loads
+        gtag('js', new Date());
+        gtag('config', gaId);
+        console.log("Google Analytics initialized");
+        console.log("dataLayer after init:", window.dataLayer);
+        
+        // Test manual tracking
+        setTimeout(() => {
+          console.log("Testing manual tracking...");
+          gtag('event', 'test_event', { 'test_parameter': 'value' });
+          console.log("Manual tracking sent, dataLayer:", window.dataLayer);
+          
+          // Check if gtag function exists
+          console.log("gtag function:", typeof window.gtag);
+          console.log("dataLayer length:", window.dataLayer.length);
+        }, 1000);
+      }, 500);
     };
     document.head.appendChild(script);
 
