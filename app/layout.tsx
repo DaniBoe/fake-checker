@@ -1,6 +1,7 @@
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { ReactNode } from "react";
+import GoogleAnalytics from "./_components/GoogleAnalytics";
 
 export const metadata = {
 	title: "Labubus Checker",
@@ -9,28 +10,11 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 	const clerkKey = process.env.CLERK_PUBLISHABLE_KEY;
-	const gaId = process.env.NEXT_PUBLIC_GA_ID;
 	
 	return (
 		<html lang="en" className="dark">
-			<head>
-				{gaId && (
-					<>
-						<script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
-						<script
-							dangerouslySetInnerHTML={{
-								__html: `
-									window.dataLayer = window.dataLayer || [];
-									function gtag(){dataLayer.push(arguments);}
-									gtag('js', new Date());
-									gtag('config', '${gaId}');
-								`,
-							}}
-						/>
-					</>
-				)}
-			</head>
 			<body className="bg-neutral-950 text-gray-100">
+				<GoogleAnalytics />
 				{clerkKey ? (
 					<ClerkProvider publishableKey={clerkKey}>{children}</ClerkProvider>
 				) : (
