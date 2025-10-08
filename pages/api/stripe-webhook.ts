@@ -27,13 +27,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			case "checkout.session.completed": {
 				const session = event.data.object as any;
 				
+				console.log('🎉 Stripe webhook received checkout.session.completed');
+				console.log('Session data:', JSON.stringify(session, null, 2));
+				
 				// Get package info from metadata
 				const packageId = session.metadata?.packageId;
 				const checks = parseInt(session.metadata?.checks || '0');
 				
+				console.log('Package info:', { packageId, checks });
+				
 				if (!packageId || !checks) {
 					console.error('Missing package info in session metadata');
-					break;
+					return res.status(400).json({ error: 'Missing package info' });
 				}
 				
 				// Find or create user profile
@@ -109,7 +114,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 						amount_paid_cents: session.amount_total || 0,
 					});
 				
-				console.log(`Added ${checks} checks to user ${userId} for package ${packageId}`);
+				console.log(`✅ Successfully added ${checks} checks to user ${userId} for package ${packageId}`);
 				break;
 			}
 			
