@@ -312,6 +312,11 @@ useEffect(() => {
 									<p className="text-sm text-emerald-200 mt-1">
 										Your checks have been added to your account. You can now continue checking images.
 									</p>
+									{usage.paidChecksRemaining > 0 && (
+										<p className="text-sm text-emerald-300 mt-1 font-medium">
+											💰 You now have {usage.paidChecksRemaining} paid checks remaining
+										</p>
+									)}
 									{window.location.search.includes('test=true') && (
 										<p className="text-xs text-emerald-300 mt-1 font-mono">
 											🧪 Test Mode: This was a simulated purchase
