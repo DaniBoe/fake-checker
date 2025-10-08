@@ -35,6 +35,11 @@ CLERK_SECRET_KEY=your_clerk_secret_key
 OPENAI_API_KEY=sk-...
 ```
 
+### Google Analytics (Optional)
+```bash
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
+
 ### Development
 ```bash
 DISABLE_FREEMIUM_LIMITS=true
@@ -55,6 +60,7 @@ Run the migration to add the new tables:
 # Apply the migration in your Supabase dashboard or via CLI
 # File: supabase_migrations/0002_package_system.sql
 ```
+
 
 
 

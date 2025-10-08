@@ -42,7 +42,6 @@ declare namespace __next_route_internal_types__ {
     | `/api/test-env`
     | `/api/upload-url`
     | `/api/usage-stats`
-    | `/api/contact`
     | `/api/contact-db`
   type DynamicRoutes<T extends string = string> = never
 
