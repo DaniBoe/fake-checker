@@ -286,7 +286,7 @@ export async function detectAbuse(ipHash: string, uaHash: string): Promise<boole
     .eq('ip_hash', ipHash)
     .gte('created_at', weekStart.toISOString());
   
-  const uniqueUACount = new Set(uniqueUAs?.map(u => u.user_agent_hash) || []).size;
+  const uniqueUACount = new Set(uniqueUAs?.map((u: any) => u.user_agent_hash) || []).size;
   
   return ipCount > 50 || uaCount > 40 || uniqueUACount > 10;
 }
