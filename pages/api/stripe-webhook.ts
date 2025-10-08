@@ -78,10 +78,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				}
 				
 				// Add checks to user's account
-				await supabase
+				// First get current remaining_checks
+				const { data: currentProfile, error: profileError } = await supabase
 					.from('profiles')
-					.update({ remaining_checks: supabase.raw(`remaining_checks + ${checks}`) })
+					.select('remaining_checks')
+					.eq('id', userId)
+					.single();
+				
+				if (profileError) throw profileError;
+				
+				const currentChecks = currentProfile?.remaining_checks || 0;
+				const newChecks = currentChecks + checks;
+				
+				// Update with new total
+				const { error: updateError } = await supabase
+					.from('profiles')
+					.update({ remaining_checks: newChecks })
 					.eq('id', userId);
+				
+				if (updateError) throw updateError;
 				
 				// Record the purchase
 				await supabase
