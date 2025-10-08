@@ -21,10 +21,20 @@ export default function GoogleAnalytics() {
 
     console.log("Loading Google Analytics with ID:", gaId);
 
+    // Test the URL first
+    const testUrl = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+    console.log("Testing URL:", testUrl);
+
     // Load the Google Analytics script
     const script = document.createElement('script');
     script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+    script.src = testUrl;
+    script.onerror = () => {
+      console.error("Failed to load Google Analytics script - 404 error");
+    };
+    script.onload = () => {
+      console.log("Google Analytics script loaded successfully");
+    };
     document.head.appendChild(script);
 
     // Initialize gtag
