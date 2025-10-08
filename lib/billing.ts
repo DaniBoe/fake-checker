@@ -27,12 +27,38 @@ export async function createCheckoutSession(params: { priceId: string; customerE
 	
 	// Real Stripe checkout for production
 	const baseUrl = params.baseUrl || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+	
+	// Package definitions for production
+	const packages = {
+		'starter': { checks: 10, price: 799, name: 'Starter Pack' },
+		'value': { checks: 40, price: 2999, name: 'Value Pack' },
+		'pro': { checks: 80, price: 5599, name: 'Pro Pack' }
+	};
+	
+	const packageData = packages[params.priceId as keyof typeof packages];
+	if (!packageData) {
+		throw new Error('Invalid package ID');
+	}
+	
 	return stripe.checkout.sessions.create({
-		mode: "subscription",
-		line_items: [{ price: params.priceId, quantity: 1 }],
+		mode: "payment",
+		line_items: [{
+			price_data: {
+				currency: 'usd',
+				product_data: {
+					name: packageData.name,
+				},
+				unit_amount: packageData.price,
+			},
+			quantity: 1,
+		}],
 		success_url: `${baseUrl}/?purchase=success`,
 		cancel_url: `${baseUrl}/pricing?status=cancelled`,
 		customer_email: params.customerEmail,
+		metadata: {
+			packageId: params.priceId,
+			checks: packageData.checks.toString()
+		}
 	});
 }
 
