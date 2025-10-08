@@ -48,6 +48,13 @@ export default function GoogleAnalytics() {
       gtag('config', gaId);
       console.log("Google Analytics initialized");
       console.log("dataLayer after init:", window.dataLayer);
+      
+      // Test manual tracking
+      setTimeout(() => {
+        console.log("Testing manual tracking...");
+        gtag('event', 'test_event', { 'test_parameter': 'value' });
+        console.log("Manual tracking sent, dataLayer:", window.dataLayer);
+      }, 1000);
     };
     document.head.appendChild(script);
 
