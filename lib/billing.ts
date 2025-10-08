@@ -58,6 +58,14 @@ export async function createCheckoutSession(params: { priceId: string; customerE
 		metadata: {
 			packageId: params.priceId,
 			checks: packageData.checks.toString()
+		},
+		// Enable automatic emails
+		payment_intent_data: {
+			receipt_email: params.customerEmail,
+		},
+		// Send receipt email automatically
+		invoice_creation: {
+			enabled: true,
 		}
 	});
 }
