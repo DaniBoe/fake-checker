@@ -21,6 +21,15 @@ export default function GoogleAnalytics() {
 
     console.log("Loading Google Analytics with ID:", gaId);
 
+    // Initialize dataLayer FIRST, before loading the script
+    window.dataLayer = window.dataLayer || [];
+    function gtag(...args: any[]) {
+      window.dataLayer.push(args);
+    }
+    window.gtag = gtag;
+    
+    console.log("dataLayer initialized:", window.dataLayer);
+
     // Test the URL first
     const testUrl = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
     console.log("Testing URL:", testUrl);
@@ -34,20 +43,13 @@ export default function GoogleAnalytics() {
     };
     script.onload = () => {
       console.log("Google Analytics script loaded successfully");
+      // Initialize gtag after script loads
+      gtag('js', new Date());
+      gtag('config', gaId);
+      console.log("Google Analytics initialized");
+      console.log("dataLayer after init:", window.dataLayer);
     };
     document.head.appendChild(script);
-
-    // Initialize gtag
-    window.dataLayer = window.dataLayer || [];
-    function gtag(...args: any[]) {
-      window.dataLayer.push(args);
-    }
-    window.gtag = gtag;
-    
-    gtag('js', new Date());
-    gtag('config', gaId);
-    
-    console.log("Google Analytics initialized");
 
     return () => {
       // Cleanup if needed
